@@ -1,0 +1,100 @@
+body,
+div {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --title_height: 50px;
+  --main_color: #66a9e5;
+  --btn_height: 36px;
+  --btn_normal_shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  --btn_active_shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%),
+    0px 5px 10px 1px rgb(0 0 0 / 14%), 0px 3px 8px 2px rgb(0 0 0 / 12%);
+  --radius: 4px;
+  --banner-height: 60px;
+}
+
+.base {
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.title {
+  height: var(--title_height);
+  line-height: var(--title_height);
+  background: var(--main_color);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 400;
+  text-indent: 16px;
+  box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%),
+    0 1px 10px 0 rgb(0 0 0 / 12%);
+}
+
+#banner {
+  display: none;
+  margin: 0 4px;
+  width: calc(100vw - 8px);
+  height: var(--banner-height);
+  line-height: var(--banner-height);
+  position: fixed;
+  top: var(--title_height);
+  color: rgba(0, 0, 0, 0.7);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+#app {
+  flex: 1;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#drinkBtn {
+  --btn_width: 150px;
+  height: var(--btn_height);
+  line-height: var(--btn_height);
+  color: #fff;
+  background: var(--main_color);
+  position: relative;
+  width: var(--btn_width);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transform: 1s;
+  box-shadow: var(--btn_normal_shadow);
+}
+
+#drinkBtn:active {
+  box-shadow: var(--btn_active_shadow);
+}
+
+#drinkBtn:active::after {
+  transform: translate(-50%, -50%) scale(0.6);
+  opacity: 0.3;
+  transition: none;
+}
+
+#drinkBtn::after {
+  content: '';
+  display: block;
+  width: max(var(--btn_height), var(--btn_width));
+  height: max(var(--btn_height), var(--btn_width));
+  background: currentColor;
+  position: absolute;
+  left: var(--x, 0);
+  top: var(--y, 0);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(2);
+  transition: transform 0.6s cubic-bezier(0.65, 0.05, 0.36, 1), opacity 0.7s;
+  opacity: 0;
+}

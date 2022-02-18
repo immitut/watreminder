@@ -1,0 +1,16 @@
+{
+  "name": "Watreminder - reminder you to drink water",
+  "short_name": "Watreminder",
+  "start_url": "/watreminder/",
+  "background_color": "#66a9e5",
+  "theme_color": "#66a9e5",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "icon/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "description": "reminder you to drink water"
+}
