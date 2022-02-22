@@ -2,7 +2,8 @@ const DRINK = '_d',
   CYCLE = '_c',
   REMIND = '_r',
   OK = 'OK',
-  NEXT = 'next'
+  NEXT = 'next',
+  MAXCOUNT = 15
 
 const _1min = 60e3
 
@@ -20,24 +21,32 @@ function init() {
 
   // serviceWorker.register
   if (navigator.serviceWorker !== null) {
-    navigator.serviceWorker
-      .register('/watreminder/sw.js')
-      .then(handleRegistration)
+    try {
+      navigator.serviceWorker
+        .register('/watreminder/sw.js')
+        .then(handleRegistration)
+    } catch (err) {
+      console.log('register error', err)
+    }
   }
 }
 
 function handleRegistration(registration) {
   Notification.requestPermission().then((result) => {
     if (result !== 'granted')
-      return console.log('permission:', Notification.permission)
+      return console.log('通知权限:', Notification.permission)
     showNotif()
   })
+
+  const setTimer = () => setInterval(showNotif, remind * _1min, 'remind')
+
+  let timer = setTimer()
 
   $('drinkBtn').onclick = () => {
     updateDrink()
     showNotif()
+    handleTimer()
   }
-  let timer = setInterval(showNotif, remind * _1min, 'remind')
 
   navigator.serviceWorker.addEventListener('message', (e) => {
     switch (e.data) {
@@ -45,13 +54,7 @@ function handleRegistration(registration) {
         updateDrink()
       case NEXT:
       default:
-        setTimeout(() => {
-          showNotif('cycle')
-          timer = setInterval(showNotif, remind * _1min, 'remind')
-        }, cycle * _1min)
-        if (!timer) return
-        clearInterval(timer)
-        timer = null
+        handleTimer()
     }
   })
 
@@ -75,14 +78,25 @@ function handleRegistration(registration) {
       ]
     registration.showNotification(title, config)
   }
+
+  function handleTimer() {
+    setTimeout(() => {
+      showNotif('cycle')
+      timer = setTimer()
+    }, cycle * _1min)
+    if (!timer) return
+    clearInterval(timer)
+    timer = null
+  }
 }
 
 const updateDrink = () => {
   const [info, update] = getDrinkInfo()
   const now = new Date()
   const key = _getDateKey(now)
-  const times = info[key] ? info[key][0] : 0
-  info[key] = [times + 1, +now]
+  const timeline = info.has(key) ? info.get(key) : []
+  timeline.push(+now)
+  info.set(key, timeline)
   update(info)
 }
 
@@ -91,11 +105,13 @@ function createNotif() {
   let msg = `今天还没喝过水呢`
   const [info] = getDrinkInfo()
   const now = new Date()
-  const [times, lastTime] = info[_getDateKey(now)] || [0, null]
-  if (times) {
+  const currTimeline = info.get(_getDateKey(now)) || []
+  if (currTimeline.length) {
+    const { length } = currTimeline
+    const lastTime = currTimeline[length - 1]
     const during = (now - lastTime) / _1min
-    title = times > 9 ? '🎉🎉🎉👏👏👏' : new Array(times).fill('💧').join('')
-    msg = `今天已经喝过 ${times} 次水了`
+    title = length > 9 ? '🎉🎉🎉👏👏👏' : new Array(length).fill('💧').join('')
+    msg = `今天已经喝过 ${length} 次水了`
     if (during > 1) msg += `\n距离上一次已经过了 ${during.toFixed(1)} 分钟`
   }
   msg = `[${_getTime(now)}]\n${msg}`
@@ -122,12 +138,22 @@ function _getDrinkInfo() {
   let data = null
   return () => {
     if (!data) {
-      data = _getItem() || {}
+      try {
+        data = new Map(_getItem())
+      } catch (err) {
+        console.log('读取数据类型异常')
+        data = new Map()
+      }
     }
     return [
       data,
-      (value) => {
-        _setItem(DRINK, value)
+      (newData) => {
+        // 数据存储上限15条
+        if (newData.size > MAXCOUNT) {
+          const [firstKey] = Array.from(newData)[0]
+          newData.delete(firstKey)
+        }
+        _setItem(DRINK, Array.from(newData))
       },
     ]
   }
