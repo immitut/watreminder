@@ -1,12 +1,15 @@
 const noConfig = !_getItem()
 if (noConfig) {
   let deferredPrompt
-  
+
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault()
     deferredPrompt = e
     const banner = document.getElementById('banner')
     banner.style.display = 'block'
+    window.addEventListener('appinstalled', () => {
+      banner.style.display = 'none'
+    })
     banner.onclick = () => {
       banner.style.display = 'none'
       deferredPrompt.prompt()
