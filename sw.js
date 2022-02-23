@@ -1,11 +1,11 @@
-const CACHEVERSION = 'sw-version-1'
+const CACHE_NAME = 'sw_cache_2'
 
 const cacheList = [
-  // '/watreminder/',
   '/watreminder/index.html',
   '/watreminder/index.js',
   '/watreminder/a2hs.js',
   '/watreminder/style.css',
+  '/watreminder/manifest.json',
   '/watreminder/icon/favicon.ico',
   '/watreminder/icon/icon.png',
 ]
@@ -28,52 +28,35 @@ self.onnotificationclick = (e) => {
   )
 }
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches
-      .open(CACHEVERSION)
-      .then((cache) => {
-        return cache.addAll(cacheList)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-      .then(() => self.skipWaiting())
-  )
+self.addEventListener('install', async () => {
+  const cache = await caches.open(CACHE_NAME)
+  await cache.addAll(cacheList)
+  self.skipWaiting()
+})
+
+self.addEventListener('activate', async () => {
+  const cacheKeys = await caches.keys()
+  cacheKeys.forEach((key) => {
+    if (key !== CACHE_NAME) {
+      caches.delete(key)
+    }
+  })
+  self.clients.claim()
 })
 
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then(function (response) {
-      const { url } = e.request
-      if (response) {
-        // console.log('cached: ', url)
-        return response
+    (async (request) => {
+      try {
+        const fresh = await fetch(request)
+        console.log('[online]', request.url)
+        return fresh
+      } catch (err) {
+        const cache = await caches.open(CACHE_NAME)
+        const res = await cache.match(request)
+        console.log('[cached]', request.url)
+        return res
       }
-      // console.log('fetching: ', url)
-      return fetch(e.request).catch((err) => {
-        console.log(`fetch ${url} error: `, err)
-      })
-    })
-  )
-})
-
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches
-      .keys()
-      .then((res) => {
-        return res.reduce((data, curr) => {
-          if (curr === CACHEVERSION) {
-            data.push(curr)
-          } else {
-            caches.delete(curr)
-          }
-          return data
-        }, [])
-      })
-      .then((res) => {
-        return self.clients.claim()
-      })
+    })(e.request)
   )
 })
