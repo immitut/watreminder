@@ -5,7 +5,10 @@ div {
 }
 
 :root {
-  --bg_color: #f5f5dc;
+  --grey: 32, 33, 36;
+  --font_color: rgb(var(--grey));
+  --hint_color: rgba(var(--grey), 0.6);
+  --bg_color: #f6f6f6;
   --title_height: 50px;
   --main_color: #66a9e5;
   --btn_height: 36px;
@@ -29,6 +32,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  color: var(--font_color);
   background: var(--bg_color);
 }
 
@@ -36,12 +40,10 @@ body {
   height: var(--title_height);
   line-height: var(--title_height);
   background: var(--main_color);
-  color: #fff;
   font-size: 20px;
   font-weight: 400;
   text-indent: 16px;
-  box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%),
-    0 1px 10px 0 rgb(0 0 0 / 12%);
+  box-shadow: var(--card_shadow);
 }
 
 #banner {
@@ -50,10 +52,10 @@ body {
   width: calc(100vw - 8px);
   height: var(--banner-height);
   line-height: var(--banner-height);
+  color: var(--hint_color);
   position: absolute;
   top: var(--title_height);
-  color: rgba(0, 0, 0, 0.7);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(var(--grey), 0.2);
 }
 
 #app {
@@ -68,8 +70,6 @@ body {
   --btn_width: 150px;
   height: var(--btn_height);
   line-height: var(--btn_height);
-  color: #fff;
-  background: var(--main_color);
   position: relative;
   width: var(--btn_width);
   border-radius: var(--radius);

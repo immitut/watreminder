@@ -32,14 +32,7 @@ function init() {
 }
 
 function handleRegistration(registration) {
-  Notification.requestPermission().then((result) => {
-    if (result !== 'granted')
-      return console.log('通知权限:', Notification.permission)
-    showNotif()
-  })
-
   const setTimer = () => setInterval(showNotif, remind * _1min, 'remind')
-
   let timer = setTimer()
 
   $('drinkBtn').onclick = () => {
@@ -76,7 +69,11 @@ function handleRegistration(registration) {
           title: '并不渴',
         },
       ]
-    registration.showNotification(title, config)
+    registration.showNotification(title, config).catch(async () => {
+      const result = await Notification.requestPermission()
+      if (result !== 'granted') return console.log('通知权限:', result)
+      showNotif()
+    })
   }
 
   function handleTimer() {
