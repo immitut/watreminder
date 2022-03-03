@@ -18,7 +18,7 @@ li {
   --title_height: 60px;
   --item_height: 56px;
   --main_color: #66a9e5;
-  --second_color: #0d47a1;
+  --second_color: #f45c01;
   --btn_height: 44px;
   --card_shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
@@ -58,14 +58,11 @@ body {
 .title {
   font-size: 20px;
   font-weight: 500;
-  background: -webkit-linear-gradient(
-    300deg,
-    var(--main_color) 10%,
-    var(--second_color) 90%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--main_color);
+}
+
+.title span {
+  color: var(--second_color);
 }
 
 #banner {
@@ -92,8 +89,9 @@ body {
   font-size: 24px;
   background: -webkit-linear-gradient(
     300deg,
-    var(--main_color) 10%,
-    var(--second_color) 90%
+    var(--second_color) 15%,
+    var(--main_color) 94%
+
   );
   background-clip: text;
   -webkit-background-clip: text;
