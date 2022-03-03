@@ -1,6 +1,7 @@
 const CACHE_NAME = 'sw_cache_2'
 
 const cacheList = [
+  '/watreminder/',
   '/watreminder/index.html',
   '/watreminder/index.js',
   '/watreminder/a2hs.js',
@@ -41,7 +42,7 @@ self.addEventListener('activate', async () => {
       caches.delete(key)
     }
   })
-  self.clients.claim()
+  await clients.claim()
 })
 
 self.addEventListener('fetch', (e) => {

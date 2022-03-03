@@ -19,6 +19,7 @@ function init() {
     target.style.setProperty('--y', offsetY + 'px')
   })
 
+  initRender()
   // serviceWorker.register
   if (navigator.serviceWorker !== null) {
     try {
@@ -55,6 +56,7 @@ function handleRegistration(registration) {
     const [title, body] = createNotif()
     const config = {
       body,
+      icon: '/watreminder/icon/favicon.ico',
       tag: 'reminder',
       renotify: true,
     }
@@ -87,25 +89,24 @@ function handleRegistration(registration) {
   }
 }
 
-const updateDrink = () => {
+const updateDrink = (now = new Date()) => {
   const [info, update] = getDrinkInfo()
-  const now = new Date()
   const key = _getDateKey(now)
-  const timeline = info.has(key) ? info.get(key) : []
-  timeline.push(+now)
-  info.set(key, timeline)
+  const todayDrinkInfo = info.has(key) ? info.get(key) : []
+  todayDrinkInfo.push(+now)
+  info.set(key, todayDrinkInfo)
+  $('list').appendChild(renderItem(_getTime(now, true)))
   update(info)
 }
 
-function createNotif() {
+function createNotif(now = new Date()) {
   let title = '😈'
   let msg = `今天还没喝过水呢`
   const [info] = getDrinkInfo()
-  const now = new Date()
-  const currTimeline = info.get(_getDateKey(now)) || []
-  if (currTimeline.length) {
-    const { length } = currTimeline
-    const lastTime = currTimeline[length - 1]
+  const todayDrinkInfo = info.get(_getDateKey(now)) || []
+  if (todayDrinkInfo.length) {
+    const { length } = todayDrinkInfo
+    const lastTime = todayDrinkInfo[length - 1]
     const during = (now - lastTime) / _1min
     title = length > 9 ? '🎉🎉🎉👏👏👏' : new Array(length).fill('💧').join('')
     msg = `今天已经喝过 ${length} 次水了`
@@ -138,7 +139,7 @@ function _getDrinkInfo() {
       try {
         data = new Map(_getItem())
       } catch (err) {
-        console.log('读取数据类型异常')
+        console.error('读取数据类型异常')
         data = new Map()
       }
     }
@@ -169,9 +170,33 @@ function _isPositiveNum(n) {
   return typeof n === 'number' && !isNaN(n) && n > 0
 }
 
-function _getTime(date) {
-  const min = date.getMinutes()
-  return `${date.getHours()}:${min < 10 ? '0' + min : min}`
+function _getTime(date, showSecond = false) {
+  const res = `${timeFix(date.getHours())}:${timeFix(date.getMinutes())}`
+  return showSecond ? res + `:${timeFix(date.getSeconds())}` : res
+}
+
+function timeFix(n) {
+  return `0${n}`.slice(-2)
+}
+
+function initRender() {
+  const [info] = getDrinkInfo()
+  const todayDrinkInfo = info.get(_getDateKey(new Date())) || []
+  const fragment = document.createDocumentFragment()
+  if (todayDrinkInfo.length) {
+    todayDrinkInfo.forEach((t) => {
+      const elm = renderItem(_getTime(new Date(t), true))
+      fragment.appendChild(elm)
+    })
+  }
+  $('list').appendChild(fragment)
+}
+
+function renderItem(text) {
+  const item = document.createElement('li')
+  item.className = 'timeItem'
+  item.innerText = text
+  return item
 }
 
 function $(id) {

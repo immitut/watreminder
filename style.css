@@ -1,16 +1,24 @@
 body,
-div {
+div,
+ul {
   margin: 0;
   padding: 0;
+}
+
+li {
+  list-style: none;
 }
 
 :root {
   --grey: 32, 33, 36;
   --font_color: rgb(var(--grey));
   --hint_color: rgba(var(--grey), 0.6);
+  /* --bg_color: #fff4f2; */
   --bg_color: #f6f6f6;
-  --title_height: 50px;
+  --title_height: 60px;
+  --item_height: 56px;
   --main_color: #66a9e5;
+  --second_color: #0d47a1;
   --btn_height: 36px;
   --card_shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
@@ -19,7 +27,7 @@ div {
   --btn_active_shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%),
     0px 5px 10px 1px rgb(0 0 0 / 14%), 0px 3px 8px 2px rgb(0 0 0 / 12%);
   --radius: 4px;
-  --banner-height: 60px;
+  --banner_height: 60px;
 }
 
 .base {
@@ -36,41 +44,83 @@ body {
   background: var(--bg_color);
 }
 
-.title {
+.nav {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  box-sizing: border-box;
   height: var(--title_height);
   line-height: var(--title_height);
-  background: var(--main_color);
-  font-size: 20px;
-  font-weight: 400;
-  text-indent: 16px;
   box-shadow: var(--card_shadow);
+  padding: 0 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  background: -webkit-linear-gradient(
+    300deg,
+    var(--main_color) 10%,
+    var(--second_color) 90%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 #banner {
   display: none;
   margin: 0 4px;
   width: calc(100vw - 8px);
-  height: var(--banner-height);
-  line-height: var(--banner-height);
+  height: var(--banner_height);
+  line-height: var(--banner_height);
   color: var(--hint_color);
   position: absolute;
   top: var(--title_height);
   border-bottom: 1px solid rgba(var(--grey), 0.2);
 }
 
-#app {
-  flex: 1;
-  display: flex;
+#content {
   min-height: 300px;
-  align-items: center;
-  justify-content: space-evenly;
+  max-height: 100vh;
+  margin-top: var(--title_height);
+  overflow-y: scroll;
+}
+
+#list {
+  display: flex;
+  flex-direction: column-reverse;
+  font-size: 24px;
+  background: -webkit-linear-gradient(
+    300deg,
+    var(--main_color) 10%,
+    var(--second_color) 90%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#list:empty::after {
+  margin-top: 20px;
+  content: '暂无数据';
+  text-align: center;
+}
+
+.timeItem {
+  text-indent: 32px;
+  height: var(--item_height);
+  line-height: var(--item_height);
 }
 
 #drinkBtn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
   --btn_width: 150px;
   height: var(--btn_height);
   line-height: var(--btn_height);
-  position: relative;
+  background-color: var(--main_color);
   width: var(--btn_width);
   border-radius: var(--radius);
   overflow: hidden;
@@ -93,7 +143,7 @@ body {
   display: block;
   width: max(var(--btn_height), var(--btn_width));
   height: max(var(--btn_height), var(--btn_width));
-  background: currentColor;
+  background: #fff;
   position: absolute;
   left: var(--x, 0);
   top: var(--y, 0);
