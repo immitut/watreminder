@@ -84,7 +84,7 @@ body {
   min-height: 300px;
   max-height: 100vh;
   margin-top: var(--title_height);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 #list {
