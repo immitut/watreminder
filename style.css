@@ -16,12 +16,11 @@ li {
   /* --bg_color: #fff4f2; */
   --bg_color: #f6f6f6;
   --title_height: 60px;
-  --item_height: 56px;
+  --line_height: 2.2;
   --main_color: #66a9e5;
   --second_color: #f45c01;
   --btn_height: 44px;
-  --card_shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  --card_shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px;
   --btn_normal_shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   --btn_active_shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%),
@@ -46,9 +45,10 @@ body {
 
 .nav {
   width: 100%;
-  position: fixed;
+  position: sticky;
   top: 0;
   box-sizing: border-box;
+  backdrop-filter: blur(10px);
   height: var(--title_height);
   line-height: var(--title_height);
   box-shadow: var(--card_shadow);
@@ -73,25 +73,24 @@ body {
   line-height: var(--banner_height);
   color: var(--hint_color);
   top: var(--title_height);
+
   border-bottom: 1px solid rgba(var(--grey), 0.2);
 }
 
-#content {
-  /* min-height: 300px; */
+/* #content {
   max-height: 100vh;
-  margin-top: var(--title_height);
+  padding-top: var(--title_height);
   overflow-y: auto;
-}
+} */
 
 #list {
   display: flex;
   flex-direction: column-reverse;
   font-size: 24px;
   background: -webkit-linear-gradient(
-    300deg,
-    var(--second_color) 15%,
+    270deg,
+    var(--second_color) 8%,
     var(--main_color) 94%
-
   );
   background-clip: text;
   -webkit-background-clip: text;
@@ -99,15 +98,14 @@ body {
 }
 
 #list:empty::after {
-  margin-top: 20px;
-  content: '暂无数据';
+  line-height: var(--line_height);
+  content: '今天还没有吨吨吨';
   text-align: center;
 }
 
 .timeItem {
   text-indent: 32px;
-  height: var(--item_height);
-  line-height: var(--item_height);
+  line-height: var(--line_height);
 }
 
 #drinkBtn {
