@@ -36,11 +36,10 @@ li {
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
   color: var(--font_color);
   background: var(--bg_color);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif,
+    'Segoe UI', Roboto;
 }
 
 .nav {
