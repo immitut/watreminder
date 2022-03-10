@@ -27,7 +27,6 @@ li {
   --btn_active_shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%),
     0px 5px 10px 1px rgb(0 0 0 / 14%), 0px 3px 8px 2px rgb(0 0 0 / 12%);
   --radius: 4px;
-  --banner_height: 60px;
 }
 
 .base {
@@ -63,24 +62,6 @@ body {
   font-weight: 600;
   color: var(--second_color);
 }
-
-#banner {
-  /* display: none; */
-  margin: 0 4px;
-  width: calc(100vw - 8px);
-  height: var(--banner_height);
-  line-height: var(--banner_height);
-  color: var(--hint_color);
-  top: var(--title_height);
-
-  border-bottom: 1px solid rgba(var(--grey), 0.2);
-}
-
-/* #content {
-  max-height: 100vh;
-  padding-top: var(--title_height);
-  overflow-y: auto;
-} */
 
 #list {
   display: flex;
