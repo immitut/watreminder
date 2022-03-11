@@ -4,7 +4,6 @@ const cacheList = [
   '/watreminder/',
   '/watreminder/index.html',
   '/watreminder/index.js',
-  '/watreminder/a2hs.js',
   '/watreminder/style.css',
   '/watreminder/manifest.json',
   '/watreminder/icon/favicon.ico',

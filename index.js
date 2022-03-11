@@ -37,7 +37,7 @@ function handleRegistration(registration) {
   let timer = setTimer()
 
   $('drinkBtn').onclick = () => {
-    updateDrink()
+    addNewItem()
     showNotif()
     handleTimer()
   }
@@ -45,7 +45,7 @@ function handleRegistration(registration) {
   navigator.serviceWorker.addEventListener('message', (e) => {
     switch (e.data) {
       case OK:
-        updateDrink()
+        addNewItem()
       case NEXT:
       default:
         handleTimer()
@@ -89,13 +89,16 @@ function handleRegistration(registration) {
   }
 }
 
-const updateDrink = (now = new Date()) => {
+const addNewItem = (now = new Date()) => {
+  const newItem = renderItem(_getTime(now, true))
+  $('list').appendChild(newItem)
+  newItem.scrollIntoView(false)
+
   const [info, update] = getDrinkInfo()
   const key = _getDateKey(now)
   const todayDrinkInfo = info.has(key) ? info.get(key) : []
   todayDrinkInfo.push(+now)
   info.set(key, todayDrinkInfo)
-  $('list').appendChild(renderItem(_getTime(now, true)))
   update(info)
 }
 

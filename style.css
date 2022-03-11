@@ -17,7 +17,7 @@ li {
   --font_color: rgb(var(--grey));
   --hint_color: rgba(var(--grey), 0.6);
   --bg_color: #f6f6f6;
-  --line_height: 2.4;
+  --line_height: 2.5;
   --main_color: #66a9e5;
   --second_color: #f45c01;
   --btn_height: 44px;
@@ -33,6 +33,11 @@ li {
   text-align: center;
   cursor: pointer;
   user-select: none;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
 }
 
 body {
@@ -86,6 +91,7 @@ body {
 .timeItem {
   text-indent: 32px;
   line-height: var(--line_height);
+  scroll-snap-align: end;
 }
 
 #drinkBtn {
@@ -109,13 +115,13 @@ body {
   box-shadow: var(--btn_active_shadow);
 }
 
-#drinkBtn:active::after {
+#drinkBtn:active::before {
   transform: translate(-50%, -50%) scale(0.6);
   opacity: 0.3;
   transition: none;
 }
 
-#drinkBtn::after {
+#drinkBtn::before {
   content: '';
   display: block;
   width: max(var(--btn_height), var(--btn_width));
