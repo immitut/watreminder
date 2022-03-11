@@ -20,8 +20,10 @@ li {
   --line_height: 2.5;
   --main_color: #66a9e5;
   --second_color: #f45c01;
-  --btn_height: 44px;
-  --btn_radius: calc(0.5 * var(--btn_height));
+  --btn_line_height: 3;
+  --btn_font_size: 16px;
+  --btn_height: calc(var(--btn_line_height) * var(--btn_font_size));
+  --btn_radius: calc(var(--btn_height) / 4);
   --card_shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px;
   --btn_normal_shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
@@ -106,7 +108,7 @@ body {
   right: 24px;
   --btn_width: 160px;
   height: var(--btn_height);
-  line-height: var(--btn_height);
+  line-height: var(--btn_line_height);
   font-size: 16px;
   font-weight: 500;
   background-color: var(--main_color);
