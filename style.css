@@ -20,7 +20,7 @@ li {
   --line_height: 2.5;
   --main_color: #66a9e5;
   --second_color: #f45c01;
-  --btn_line_height: 3;
+  --btn_line_height: 3.25;
   --btn_font_size: 16px;
   --btn_height: calc(var(--btn_line_height) * var(--btn_font_size));
   --btn_radius: calc(var(--btn_height) / 4);
@@ -106,8 +106,7 @@ body {
   z-index: var(--top_zIndex);
   bottom: 24px;
   right: 24px;
-  --btn_width: 160px;
-  height: var(--btn_height);
+  --btn_width: min(140px, 32vw);
   line-height: var(--btn_line_height);
   font-size: 16px;
   font-weight: 500;
