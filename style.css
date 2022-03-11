@@ -91,6 +91,10 @@ body {
 .timeItem {
   text-indent: 32px;
   line-height: var(--line_height);
+  scroll-snap-align: start;
+}
+
+.timeItem:last-child {
   scroll-snap-align: end;
 }
 
