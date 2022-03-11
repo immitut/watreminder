@@ -21,12 +21,12 @@ li {
   --main_color: #66a9e5;
   --second_color: #f45c01;
   --btn_height: 44px;
+  --btn_radius: calc(0.5 * var(--btn_height));
   --card_shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px;
   --btn_normal_shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   --btn_active_shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%),
     0px 5px 10px 1px rgb(0 0 0 / 14%), 0px 3px 8px 2px rgb(0 0 0 / 12%);
-  --radius: 4px;
 }
 
 .base {
@@ -58,7 +58,7 @@ body {
 
 .title {
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 3;
   color: var(--main_color);
 }
@@ -107,10 +107,11 @@ body {
   --btn_width: 160px;
   height: var(--btn_height);
   line-height: var(--btn_height);
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 500;
   background-color: var(--main_color);
   width: var(--btn_width);
-  border-radius: var(--radius);
+  border-radius: var(--btn_radius);
   overflow: hidden;
   transition: box-shadow 0.1s;
   box-shadow: var(--btn_normal_shadow);
