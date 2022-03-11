@@ -15,7 +15,7 @@ li {
   --mid_zIndex: 2;
   --grey: 32, 33, 36;
   --font_color: rgb(var(--grey));
-  --hint_color: rgba(var(--grey), 0.6);
+  --hint_color: rgba(var(--grey), 0.1);
   --bg_color: #f6f6f6;
   --line_height: 2.5;
   --main_color: #66a9e5;
@@ -92,7 +92,7 @@ body {
   text-indent: 32px;
   line-height: var(--line_height);
   scroll-snap-align: start;
-  border: 1px solid #111;
+  border-bottom: 1px solid var(--hint_color);
 }
 
 .timeItem:last-child {
