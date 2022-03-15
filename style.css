@@ -164,6 +164,7 @@ input:checked + ul {
   overflow: hidden;
   transition: box-shadow 0.1s;
   box-shadow: var(--btn_normal_shadow);
+  -webkit-tap-highlight-color: transparent;
 }
 
 #drinkBtn:active {
