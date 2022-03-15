@@ -20,8 +20,10 @@ function init() {
   })
 
   initRender()
-  // serviceWorker.register
-  if (navigator.serviceWorker !== null) {
+  _intersectionObserver()
+
+  if ('serviceWorker' in navigator) {
+    // serviceWorker.register
     try {
       navigator.serviceWorker
         .register('/watreminder/sw.js')
@@ -90,13 +92,20 @@ function handleRegistration(registration) {
 }
 
 const addNewItem = (now = new Date()) => {
-  const newItem = renderItem(_getTime(now, true))
-  $('list').appendChild(newItem)
-  newItem.scrollIntoView(false)
-
   const [info, update] = getDrinkInfo()
   const key = _getDateKey(now)
-  const todayDrinkInfo = info.has(key) ? info.get(key) : []
+  let todayDrinkInfo = []
+  if (info.has(key)) {
+    todayDrinkInfo = info.get(key)
+    const newItem = renderItem(_getTime(now, true))
+    const lastList = document.querySelector('.list')
+    lastList.insertBefore(newItem, lastList.firstChild)
+  } else {
+    const fragment = renderTimeInfo(key, [now])
+    $('list').insertBefore(fragment, $('list').firstChild)
+  }
+  scrollTop()
+  // newItem.scrollIntoView(false)
   todayDrinkInfo.push(+now)
   info.set(key, todayDrinkInfo)
   update(info)
@@ -132,7 +141,9 @@ function _setItem(key, data) {
 }
 
 function _getDateKey(now) {
-  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
+  const m = timeFix(now.getMonth() + 1)
+  const d = timeFix(now.getDate())
+  return `${now.getFullYear()}.${m}.${d}`
 }
 
 function _getDrinkInfo() {
@@ -184,15 +195,50 @@ function timeFix(n) {
 
 function initRender() {
   const [info] = getDrinkInfo()
-  const todayDrinkInfo = info.get(_getDateKey(new Date())) || []
   const fragment = document.createDocumentFragment()
-  if (todayDrinkInfo.length) {
-    todayDrinkInfo.forEach((t) => {
-      const elm = renderItem(_getTime(new Date(t), true))
-      fragment.appendChild(elm)
-    })
-  }
+  info.forEach((data, title) => {
+    const temp = renderTimeInfo(title, data)
+    fragment.insertBefore(temp, fragment.firstChild)
+  })
   $('list').appendChild(fragment)
+}
+
+function scrollTop() {
+  document.querySelector('.timeTitle').scrollIntoView(false)
+}
+
+function renderTimeInfo(title, data) {
+  const box = document.createElement('div')
+  box.className = 'info'
+  const itemTitle = renderTitle(title)
+  const ulElm = renderList(data)
+  box.append(itemTitle)
+  box.append(ulElm)
+  return box
+}
+
+function renderList(data) {
+  const ul = document.createElement('ul')
+  ul.className = 'list'
+  data.forEach((t) => {
+    const elm = renderItem(_getTime(new Date(t), true))
+    ul.insertBefore(elm, ul.firstChild)
+  })
+  return ul
+}
+
+function renderTitle(text) {
+  const fragment = document.createDocumentFragment()
+  const item = document.createElement('label')
+  item.setAttribute('for', text)
+  item.className = 'timeTitle'
+  item.innerText = text
+  const checkbox = document.createElement('input')
+  checkbox.type = 'checkbox'
+  checkbox.id = text
+  fragment.append(item)
+  fragment.append(checkbox)
+  return fragment
 }
 
 function renderItem(text) {
@@ -200,6 +246,21 @@ function renderItem(text) {
   item.className = 'timeItem'
   item.innerText = text
   return item
+}
+
+function _intersectionObserver() {
+  const firstChild = document.querySelector('.timeTitle')
+  if (!firstChild) return
+  const intersectionObserver = new IntersectionObserver((entries) => {
+    const { intersectionRatio } = entries[0]
+    if (intersectionRatio === 0) {
+      document.querySelector('.nav').classList.add('shadow')
+    } else {
+      document.querySelector('.nav').classList.remove('shadow')
+    }
+  })
+
+  intersectionObserver.observe(firstChild)
 }
 
 function $(id) {

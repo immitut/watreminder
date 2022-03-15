@@ -8,6 +8,7 @@ p {
 
 li {
   list-style: none;
+  /* border-bottom: 1px solid var(--hint_color); */
 }
 
 :root {
@@ -17,6 +18,7 @@ li {
   --font_color: rgb(var(--grey));
   --hint_color: rgba(var(--grey), 0.1);
   --bg_color: #f6f6f6;
+  --radius: 4px;
   --line_height: 2.5;
   --main_color: #66a9e5;
   --second_color: #f45c01;
@@ -54,15 +56,19 @@ body {
   z-index: var(--top_zIndex);
   top: 0;
   backdrop-filter: blur(10px);
-  box-shadow: var(--card_shadow);
-  padding: 0 16px;
+  transition: box-shadow 0.4s;
 }
 
 .title {
   font-size: 20px;
   font-weight: 500;
   line-height: 3;
+  text-indent: 16px;
   color: var(--main_color);
+}
+
+.shadow {
+  box-shadow: var(--card_shadow);
 }
 
 .title span {
@@ -70,9 +76,13 @@ body {
   color: var(--second_color);
 }
 
-#list {
-  display: flex;
-  flex-direction: column-reverse;
+.total {
+  display: none;
+  line-height: 60px;
+  text-align: right;
+}
+
+.list {
   font-size: 24px;
   background: -webkit-linear-gradient(
     270deg,
@@ -85,20 +95,58 @@ body {
 }
 
 #list:empty::after {
+  font-size: 24px;
+  display: block;
   line-height: var(--line_height);
-  content: '今天还没有吨吨吨';
+  content: '👀';
   text-align: center;
 }
 
-.timeItem {
-  text-indent: 32px;
-  line-height: var(--line_height);
-  scroll-snap-align: start;
-  border-bottom: 1px solid var(--hint_color);
+.info {
+  padding-left: 32px;
+  /* scroll-snap-align: end; */
 }
 
-.timeItem:last-child {
+.timeTitle {
+  display: inline-block;
+  border-radius: var(--radius);
+  background: darkseagreen;
+  padding: 4px 10px;
+  margin: 8px 0;
+  cursor: pointer;
+  font-size: 16px;
+  /* scroll-snap-align: end; */
+}
+
+.timeItem {
+  height: auto;
+  line-height: var(--line_height);
   scroll-snap-align: end;
+}
+
+input[type='checkbox'] {
+  display: none;
+}
+
+input:checked + ul {
+  animation: g 0.2s ease-out forwards;
+}
+
+@keyframes g {
+  0% {
+    height: 80px;
+  }
+  50% {
+    height: 60px;
+  }
+  95% {
+    height: 1px;
+  }
+  100% {
+    height: 0;
+    top: -10000px;
+    position: absolute;
+  }
 }
 
 #drinkBtn {
